@@ -1,0 +1,20 @@
+library (caret);
+library (kernlab); // dataset is given by this
+data(spam)
+inTrain <- createDataPartition(y=spam$type,p=0.75,list=FALSE)   // p = 0.75 means train =75% data and test = 25% data
+training <- spam [inTrain,]
+testing <- spam[-inTrain,]
+dim (training) // dimension of an object // output: 3451       58
+dim (testing) //output: 1150      58
+
+// Fit a model
+set.seed(32343) // Pseudo random number generator // Given the same seed , gives the same seq
+modelFit <- train(type~. , data = training , method = "glm") 
+// train is the command from caret package 
+// ~. is used to use all the other variables in this data frame
+// Output: 3451 samples
+//         57 predictor
+//         2 classes: "nonspam","spam"
+// Generalised linear model
+modelFit$finalModel
+confusionMatrix(predictions,testing$type)
